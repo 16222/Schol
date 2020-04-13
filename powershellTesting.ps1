@@ -1,4 +1,4 @@
-Add-Type -Path "C:\Program Files\System.Data.SQLite\2010\bin\System.Data.SQLite.dll"
+Add-Type -Path "..\Schol\System.Data.SQLite\2010\bin\System.Data.SQLite.dll"
 $con = New-Object -TypeName System.Data.SQLite.SQLiteConnection
 $con.ConnectionString = "DataSource=powershellDatabase.db"
 $con.Open()
