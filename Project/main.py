@@ -4,5 +4,9 @@ import json #importing json libraries
 
 app = Flask(__name__) #initialising server
 
+@app.route('/')
+def home():
+    return render_template('home.html')
+
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port='8080')

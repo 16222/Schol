@@ -1,0 +1,79 @@
+
+/* Things used in the layout */
+
+body{/*white background*/
+  background-color: white;
+}
+
+.border{ /*borders for content tabs class*/
+  border: 5px solid black;
+  border-bottom-left-radius: 5px;
+  border-bottom-right-radius: 5px;
+  border-top: 0px;
+}
+
+nav { /*surrounding nav element*/
+  width:99.25%;
+  top: 0;
+  /*background-image: linear-gradient(60deg, #b39800, black, black)*/;
+  overflow: hidden;
+  Border: 5px solid black;
+}
+
+nav a { /* nav links route*/
+  height: 35px;
+  width: auto;
+  float:left;
+  display:block;
+  padding: 8px;
+  background-color: black;
+  color: white;
+  text-align:center;
+  background: transparent;
+}
+
+nav a:hover { /*class used for navbar links whilst they are being hovered over*/
+  color: white;
+  display:block;
+  padding: 8px;
+  background-color: black;
+  position: sticky;
+}
+
+content{/*gradient tab which covers all main content within the page*/
+  /*background-image: linear-gradient(90deg, #b39800, black, black);*/
+  color: white;
+  display: block;
+  padding: 5px;
+  /*opacity: 0.8;*/
+}
+
+content a:link{ /*content tabs and links*/
+  color:white;
+}
+
+content a:visited{ /*content tabs and visited links*/
+  color:white;
+}
+
+.background{ /*background image*/
+  opacity:0.5;
+  position: absolute;
+  /*background-image:url('/static/images/bonfire.png');*/
+  width:400px;
+  height:400px;
+  bottom:0px;
+  right:0px;
+  background-repeat: no-repeat;
+}
+
+footer{ /*sticky footer*/
+  bottom:0px;
+  color:white;
+  position:fixed;
+  padding:5px;
+  background-color: black;
+  width:900px;
+}
+
+/*Layout css ends*/

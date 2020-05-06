@@ -1,0 +1,20 @@
+<!doctype html>
+<html>
+  <head>
+   <title> DS3 Calculator - {{page_title}}</title>
+   <link rel = 'stylesheet' type = 'text/css' href = '/static/css/style.css'> <!--linking stylesheet-->
+   <link rel='icon' href='/static/favicon/favicon2.ico' type='image/x-icon' >
+   <script src='/static/js/jquery-3.4.1.js'></script> <!--linking jquery-->
+   <script src='/static/js/select2.min.js'></script> <!--linking select2-->
+   <link href='/static/css/select2.min.css' rel='stylesheet'> <!--linking select2's css-->
+  </head>
+  <body>
+    {% include 'header.html'%}
+    {% include 'navigation.html' %}
+    {% block content %}
+    {% endblock %}
+    <div class='background'></div>
+    <br>
+    {% include 'footer.html' %}
+  </body> <!--including templates-->
+</html>
