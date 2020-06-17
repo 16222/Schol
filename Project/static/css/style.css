@@ -1,6 +1,11 @@
 
 /* Things used in the layout */
 
+.logo{
+  text-align: center;
+  border: 5px solid black;
+}
+
 body{/*white background*/
   background-color: white;
 }
@@ -73,7 +78,8 @@ footer{ /*sticky footer*/
   position:fixed;
   padding:5px;
   background-color: black;
-  width:900px;
+  width:100%;
+  padding-right: 5px;
 }
 
 /*Layout css ends*/
