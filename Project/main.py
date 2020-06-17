@@ -1,6 +1,7 @@
 from flask import Flask, render_template, request, jsonify, abort, redirect #importing flask libraries
 import sqlite3 #importing sqlite3 libraries
 import json #importing json libraries
+import sys, subprocess #importing subprocess and system libraries
 from flask_sqlalchemy import SQLAlchemy
 
 app = Flask(__name__) #initialising server
@@ -26,6 +27,10 @@ def queryConstruction():
 
 @app.route('/getDetails')
 def pullDetails():
+    p = subprocess.Popen((["powershell.exe",
+                            "./ADFetch.ps1"]),
+                             stdout = sys.stdout) #i can execute the powershell script from python
+
     return render_template('queryDisplay.html')
 
 if __name__ == '__main__':
