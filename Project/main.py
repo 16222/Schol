@@ -12,40 +12,34 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 db = SQLAlchemy(app)
 
-backup = sys.stdout
-currentstdout = io.StringIO()
-print(currentstdout.getvalue())
-
-try:
-    #sys.stdout = currentstdout
-    p = subprocess.Popen((["powershell.exe",
-                            "./query.ps1"]),
-                            cwd=os.path.dirname(os.path.realpath(__file__)),
-                            stdout = sys.stdout) #i can execute the powershell script from python
-finally:
-    sys.stdout = backup
-    output = currentstdout.read()
-    currentstdout.close()
-
-print(output)
-
 class test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     example = db.Column(db.String)
+
+class resultStorage(db.Model):
+    id = db.Column(db.Integer, primary_key=True)
+    data = db.Column(db.String)
 
 db.create_all()
 
 @app.route('/')
 def home():
-    return render_template('home.html')
+    return render_template('home.html', title = "Home")
 
 @app.route('/query')
 def queryConstruction():
-    return render_template('queryCreation.html')
+    try:
+        p = subprocess.Popen((["powershell.exe",
+                                "./query.ps1"]),
+                                cwd=os.path.dirname(os.path.realpath(__file__))) 
+                                #i can execute the powershell script from python
+    finally:
+        results = resultStorage.data[0]
+    return render_template('queryDisplay.html', results=results, title="Query")
 
 @app.route('/getDetails')
 def pullDetails():
-    return render_template('queryDisplay.html')
+    return render_template('queryCreation.html')
 
 if __name__ == '__main__':
     app.run(debug=True, host='localhost', port='8080')
