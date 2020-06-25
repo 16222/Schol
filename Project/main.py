@@ -34,8 +34,13 @@ def queryConstruction():
                                 cwd=os.path.dirname(os.path.realpath(__file__))) 
                                 #i can execute the powershell script from python
     finally:
-        results = resultStorage.data[0]
-    return render_template('queryDisplay.html', results=results, title="Query")
+        x = open("output.txt", "r")
+        x = x.read()
+        x = x.strip()
+        x = x.split(':')
+        print(x)
+        #x = dict(x)
+    return render_template('queryDisplay.html', results=x, title="Query")
 
 @app.route('/getDetails')
 def pullDetails():

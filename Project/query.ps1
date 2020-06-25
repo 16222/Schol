@@ -8,8 +8,8 @@ $sql.CommandText = "SELECT * FROM test" #testing select queries
 $adapter = New-Object -TypeName System.Data.SQLite.SQLiteDataAdapter $sql
 $data = New-Object System.Data.DataSet
 [void]$adapter.Fill($data)
-$var = $data.tables.rows | Format-List
-$sql.CommandText = "UPDATE result_storage (data) VALUES (@data)"; #testing insert statements
-$sql.Parameters.AddWithValue("@data", $var);
-Write-Output $var
-$sql.ExecuteNonQuery();
+#$var = $data.tables.rows | Format-List
+$data.tables.rows | Format-List | Out-File  -FilePath .\output.txt
+#$sql.CommandText = "UPDATE result_storage (data) VALUES (@data)"; #testing insert statements
+#$sql.Parameters.AddWithValue("@data", $var);
+#$sql.ExecuteNonQuery();
