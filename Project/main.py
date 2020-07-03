@@ -1,9 +1,7 @@
 from flask import Flask, render_template, request, jsonify, abort, redirect #importing flask libraries
 import sqlite3 #importing sqlite3 libraries
 import json #importing json libraries
-import sys, subprocess, os #importing subprocess, system and os libraries
 from flask_sqlalchemy import SQLAlchemy
-import io #importing i/o libaries
 
 app = Flask(__name__) #initialising server
 
@@ -28,18 +26,7 @@ def home():
 
 @app.route('/query')
 def queryConstruction():
-    try:
-        p = subprocess.Popen((["powershell.exe",
-                                "./query.ps1"]),
-                                cwd=os.path.dirname(os.path.realpath(__file__))) 
-                                #i can execute the powershell script from python
-    finally:
-        x = open("output.txt", "r")
-        x = x.read()
-        x = x.strip()
-        x = x.split(':')
-        print(x)
-        #x = dict(x)
+    
     return render_template('queryDisplay.html', results=x, title="Query")
 
 @app.route('/getDetails')

@@ -1,8 +1,23 @@
 {% extends 'layout.html' %}
 {% block content %}
-<h1>
+<table>
+<tr>
+    <th>
+        Variable
+    </th>
+    <th>
+        Data
+    </th>
+</tr>
 {%for i in results%}
-{{results[i]}}
+<tr>
+    <td>
+        {{i[0]}}
+    </td>
+    <td>
+        {{i[1]}}
+    </td>
+</tr>
 {%endfor%}
-</h1>
+</table>
 {% endblock %}
