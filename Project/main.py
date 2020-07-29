@@ -44,11 +44,25 @@ def login():
         state=session["state"],
         redirect_uri=url_for("authorised", _external=True)
     )
-    return "<a href='%s'>Login with Microsoft Identity</a>" % auth_url
+    print(url_for("authorised", _external=True))
+    print(auth_url)
+    return render_template('login.html', results=auth_url)
 
-@app.route('/tokenget')
+@app.route('/tokenGet')
 def authorised():
-    return render_template('/home')
+    if request.args['state'] != session.get("state"):
+        return redirect(url_for("login"))
+    cache = _load_cache()
+    result = _build_msal_app(cache).acquire_token_by_authorization_code(
+        request.args['code'],
+        scopes=app_config.SCOPE,  # Misspelled scope would cause an HTTP 400 error here
+        redirect_uri=url_for("authorised", _external=True))
+    if "error" in result:
+        return "Login failure: %s, %s" % (
+            result["error"], result.get("error_description"))
+    session["user"] = result.get("id_token_claims")
+    _save_cache(cache)
+    return redirect("/home")
 
 @app.route('/query')
 def queryConstruction():
