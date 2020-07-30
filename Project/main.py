@@ -62,7 +62,7 @@ def authorised():
             result["error"], result.get("error_description"))
     session["user"] = result.get("id_token_claims")
     _save_cache(cache)
-    return redirect("/home")
+    return redirect("/")
 
 @app.route('/query')
 def queryConstruction():
