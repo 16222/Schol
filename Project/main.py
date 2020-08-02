@@ -14,11 +14,11 @@ app = Flask(__name__) #initialising server
 app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///networkData.db"
 app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
-app.config.from_object(app_config)
+app.config.from_object(app_config) #importing app_config variables
 
 Session(app)
 
-db = SQLAlchemy(app)
+db = SQLAlchemy(app) #initialising sqlalchemy
 
 class test(db.Model):
     id = db.Column(db.Integer, primary_key=True)
@@ -28,7 +28,7 @@ class resultStorage(db.Model):
     id = db.Column(db.Integer, primary_key=True)
     data = db.Column(db.String)
 
-db.create_all()
+db.create_all() #creating all sqlalchemytables
 
 @app.route('/')
 def home():
@@ -39,7 +39,7 @@ def home():
 @app.route('/login')
 def login():
     session["state"] = str(uuid.uuid4())
-    auth_url = _build_msal_app().get_authorization_request_url(
+    auth_url = _build_msal_app().get_authorization_request_url( #grabs the created url from the relevant scope, state and url
         app_config.SCOPE,
         state=session["state"],
         redirect_uri=url_for("authorised", _external=True)
@@ -69,9 +69,11 @@ def queryConstruction():
     
     return render_template('queryDisplay.html', results=x, title="Query")
 
-@app.route('/getDetails')
-def pullDetails():
-    return render_template('queryCreation.html')
+@app.route('/logout')
+def logout():
+    session.clear() #clears any information kept in session so that future logins aren't interfered with.
+    return redirect("https://login.microsoftonline.com/common/oauth2/v2.0/logout"
+        "?post_logout_redirect_uri=" + url_for("home", _external=True)) #using the microsoft common url to logout
 
 def _load_cache():
     cache = SerializableTokenCache()
