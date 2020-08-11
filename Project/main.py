@@ -5,9 +5,9 @@ from flask_sqlalchemy import SQLAlchemy
 from flask_session import Session
 import app_config
 import uuid
+import requests
 #from msalDef import _load_cache, _save_cache, _build_msal_app, _get_token_from_cache
 from msal import ConfidentialClientApplication, PublicClientApplication, SerializableTokenCache
-
 
 app = Flask(__name__) #initialising server
 
@@ -16,7 +16,7 @@ app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
 
 app.config.from_object(app_config) #importing app_config variables
 
-Session(app)
+Session(app) #creates an object 'session' that can be used to store dict key/value pairs
 
 db = SQLAlchemy(app) #initialising sqlalchemy
 
@@ -33,41 +33,52 @@ db.create_all() #creating all sqlalchemytables
 @app.route('/')
 def home():
     if not session.get('user'):
-        return redirect(url_for("login"))
-    return render_template('home.html', title = "Home", user=session["user"])
+        return redirect(url_for("login")) #redirect to login page if auth token isn't had
+
+    x = session['user']
+    return render_template('home.html', title = "Home", user=x['name']) #else redirect to home page
 
 @app.route('/login')
 def login():
-    session["state"] = str(uuid.uuid4())
+    session["state"] = str(uuid.uuid4()) 
     auth_url = _build_msal_app().get_authorization_request_url( #grabs the created url from the relevant scope, state and url
         app_config.SCOPE,
         state=session["state"],
-        redirect_uri=url_for("authorised", _external=True)
+        redirect_uri=url_for("authorised", _external=True) #after token is got, sends the user to the authorised def()
     )
-    print(url_for("authorised", _external=True))
-    print(auth_url)
-    return render_template('login.html', results=auth_url)
+    #print(url_for("authorised", _external=True))
+    #print(auth_url)
+    return render_template('login.html', results=auth_url) #parses in the link into msal authentication
 
 @app.route('/tokenGet')
 def authorised():
-    if request.args['state'] != session.get("state"):
+    if request.args['state'] != session.get("state"): #if the request != the uuid generated before, redirect to login page
         return redirect(url_for("login"))
     cache = _load_cache()
     result = _build_msal_app(cache).acquire_token_by_authorization_code(
         request.args['code'],
-        scopes=app_config.SCOPE,  # Misspelled scope would cause an HTTP 400 error here
+        scopes=app_config.SCOPE,  #uses the scope from app_config
         redirect_uri=url_for("authorised", _external=True))
     if "error" in result:
         return "Login failure: %s, %s" % (
-            result["error"], result.get("error_description"))
-    session["user"] = result.get("id_token_claims")
+            result["error"], result.get("error_description")) #error handling
+    session["user"] = result.get("id_token_claims") #sets key/value pair in session
     _save_cache(cache)
     return redirect("/")
 
 @app.route('/query')
 def queryConstruction():
-    
-    return render_template('queryDisplay.html', results=x, title="Query")
+    token = _get_token_from_cache(app_config.SCOPE)
+    if not token:
+        return redirect(url_for("login"))
+    graph_data = requests.get(
+        app_config.ENDPOINT,
+        headers = {'Authorization': 'Bearer ' + token['access_token']}).json()
+    #print(graph_data)
+    x = session['user']
+    y = graph_data['value']
+    print(y)
+    return render_template('queryDisplay.html', title="Query", graph_data=y, user=x['name'])
 
 @app.route('/logout')
 def logout():

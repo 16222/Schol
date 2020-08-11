@@ -1,23 +1,28 @@
 {% extends 'layout.html' %}
 {% block content %}
-<table>
-<tr>
-    <th>
-        Variable
-    </th>
-    <th>
-        Data
-    </th>
-</tr>
-{%for i in results%}
-<tr>
-    <td>
-        {{i[0]}}
-    </td>
-    <td>
-        {{i[1]}}
-    </td>
-</tr>
-{%endfor%}
-</table>
+{% for i in graph_data %}
+<br><br>
+Business Phone - {{ i['businessPhones'] }}
+<br>
+Account Name - {{ i['displayName'] }}
+<br>
+Given Name - {{ i['givenName'] }}
+<br>
+Surname - {{ i['surname'] }}
+<br>
+Job Title - {{ i['jobTitle'] }}
+<br>
+Contact Mail - {{ i['mail'] }}
+<br>
+Mobile Phone - {{ i['mobilePhone'] }}
+<br>
+Office Location - {{ i['officeLocation'] }}
+<br>
+Preferred Language - {{ i['PreferredLanguage'] }}
+<br>
+Logon Name - {{ i['userPrincipalName'] }}
+<br>
+Id - {{ i['id'] }}
+<br>
+{% endfor %}
 {% endblock %}
