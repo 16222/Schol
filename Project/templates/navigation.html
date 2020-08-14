@@ -1,6 +1,11 @@
 
 {%block content%}
 <nav>
-    <a href = '/query'>link</a>
+    {% if results %}
+    <a href = {{results}}>Login</a>
+    {% else %}
+    <a href = '/query'>User Information</a>
+    <a href = '/logout'>Logout</a>
+    {% endif %}
 </nav>
 {%endblock%}

@@ -1,12 +1,14 @@
 <!doctype html>
 <html>
   <head>
-   <title>{{title}}</title>
+   <title>AzurePull - {{title}}</title>
    <link rel = 'stylesheet' type = 'text/css' href = '/static/css/style.css'>
   </head>
   <body>
     {% include 'header.html'%}
+    {% if user %}
     <h1>Hello, {{user}}!</h1>
+    {% endif %}
     {% include 'navigation.html' %}
     {% block content %}
     {% endblock %}
