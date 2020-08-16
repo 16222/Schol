@@ -36,19 +36,22 @@ def home():
         return redirect(url_for("login")) #redirect to login page if auth token isn't had
 
     x = session['user']
-    return render_template('home.html', title = "Home", user=x['name']) #else redirect to home page
+    return render_template('home.html', title = "Home", user=x['name'], account=x['preferred_username']) #else redirect to home page
 
 @app.route('/login')
 def login():
-    session["state"] = str(uuid.uuid4()) 
-    auth_url = _build_msal_app().get_authorization_request_url( #grabs the created url from the relevant scope, state and url
-        app_config.SCOPE,
-        state=session["state"],
-        redirect_uri=url_for("authorised", _external=True) #after token is got, sends the user to the authorised def()
-    )
-    #print(url_for("authorised", _external=True))
-    #print(auth_url)
-    return render_template('login.html', results=auth_url) #parses in the link into msal authentication
+    try:
+        session["state"] = str(uuid.uuid4()) 
+        auth_url = _build_msal_app().get_authorization_request_url( #grabs the created url from the relevant scope, state and url
+            app_config.SCOPE,
+            state=session["state"],
+            redirect_uri=url_for("authorised", _external=True) #after token is got, sends the user to the authorised def()
+        )
+        #print(url_for("authorised", _external=True))
+        #print(auth_url)
+    except:
+        return render_template(error.html)
+    return render_template('login.html', results=auth_url, title = "Login") #parses in the link into msal authentication
 
 @app.route('/tokenGet')
 def authorised():
@@ -82,9 +85,12 @@ def queryConstruction():
 
 @app.route('/logout')
 def logout():
-    session.clear() #clears any information kept in session so that future logins aren't interfered with.
-    return redirect("https://login.microsoftonline.com/common/oauth2/v2.0/logout"
-        "?post_logout_redirect_uri=" + url_for("home", _external=True)) #using the microsoft common url to logout
+    if session.get('user'):
+        session.clear() #clears any information kept in session so that future logins aren't interfered with.
+        return redirect("https://login.microsoftonline.com/common/oauth2/v2.0/logout"
+            "?post_logout_redirect_uri=" + url_for("home", _external=True)) #using the microsoft common url to logout
+    else:
+        return redirect(url_for('login'))
 
 def _load_cache():
     cache = SerializableTokenCache()
