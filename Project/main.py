@@ -43,7 +43,7 @@ def login():
     try:
         session["state"] = str(uuid.uuid4()) 
         auth_url = _build_msal_app().get_authorization_request_url( #grabs the created url from the relevant scope, state and url
-            app_config.SCOPE,
+            app_config.SCOPE[0],
             state=session["state"],
             redirect_uri=url_for("authorised", _external=True) #after token is got, sends the user to the authorised def()
         )
@@ -60,18 +60,20 @@ def authorised():
     cache = _load_cache()
     result = _build_msal_app(cache).acquire_token_by_authorization_code(
         request.args['code'],
-        scopes=app_config.SCOPE,  #uses the scope from app_config
+        scopes=app_config.SCOPE[0],  #uses the scope from app_config
         redirect_uri=url_for("authorised", _external=True))
     if "error" in result:
         return "Login failure: %s, %s" % (
             result["error"], result.get("error_description")) #error handling
     session["user"] = result.get("id_token_claims") #sets key/value pair in session
     _save_cache(cache)
+    print(cache)
     return redirect("/")
 
-@app.route('/query')
-def queryConstruction():
-    token = _get_token_from_cache(app_config.SCOPE)
+@app.route('/user')
+def userData():
+    result = _build_msal_app()
+    token = _get_token_from_cache(app_config.SCOPE[0])
     if not token:
         return redirect(url_for("login"))
     graph_data = requests.get(
@@ -81,7 +83,21 @@ def queryConstruction():
     x = session['user']
     y = graph_data['value']
     print(y)
-    return render_template('queryDisplay.html', title="Query", graph_data=y, user=x['name'])
+    return render_template('userData.html', title="Query", graph_data=y, user=x['name'])
+
+@app.route('/audit')
+def auditLogs():
+    token = _get_token_from_cache(app_config.SCOPE[0])
+    #if not token:
+    #    return redirect(url_for("login"))
+    graph_data = requests.get("https://graph.microsoft.com/v1.0/auditLogs/directoryAudits",
+    headers = {'Authorization': 'Bearer ' + token['access_token']}).json()
+    #print(graph_data)
+    x = session['user']
+    y = graph_data['value']
+    print(y)
+    
+    return render_template('auditLogs.html', user=x['name'], graph_data=y[0])
 
 @app.route('/logout')
 def logout():
