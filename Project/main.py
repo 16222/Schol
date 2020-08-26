@@ -1,4 +1,4 @@
-from flask import Flask, render_template, request, jsonify, abort, redirect, session, url_for #importing flask libraries
+from flask import Flask, render_template, request, jsonify, abort, redirect, session, url_for, flash#importing flask libraries
 import sqlite3 #importing sqlite3 libraries
 import json #importing json libraries
 from flask_sqlalchemy import SQLAlchemy
@@ -40,6 +40,8 @@ def home():
 
 @app.route('/login')
 def login():
+    if session.get("user"):
+        return redirect(url_for('home'))
     try:
         session["state"] = str(uuid.uuid4()) 
         auth_url = _build_msal_app().get_authorization_request_url( #grabs the created url from the relevant scope, state and url
@@ -56,12 +58,12 @@ def login():
 @app.route('/tokenGet')
 def authorised():
     if request.args['state'] != session.get("state"): #if the request != the uuid generated before, redirect to login page
-        return redirect(url_for("login"))
-    cache = _load_cache()
+        return redirect(url_for("login"))             #effectively checks for if login is correct
+    cache = _load_cache() #Load previously created cache information
     result = _build_msal_app(cache).acquire_token_by_authorization_code(
         request.args['code'],
         scopes=app_config.SCOPE[0],  #uses the scope from app_config
-        redirect_uri=url_for("authorised", _external=True))
+        redirect_uri=url_for("authorised", _external=True)) #Builds an MSAL app given 
     if "error" in result:
         return "Login failure: %s, %s" % (
             result["error"], result.get("error_description")) #error handling
@@ -72,7 +74,6 @@ def authorised():
 
 @app.route('/user')
 def userData():
-    result = _build_msal_app()
     token = _get_token_from_cache(app_config.SCOPE[0])
     if not token:
         return redirect(url_for("login"))
@@ -87,17 +88,24 @@ def userData():
 
 @app.route('/audit')
 def auditLogs():
-    token = _get_token_from_cache(app_config.SCOPE[0])
-    #if not token:
-    #    return redirect(url_for("login"))
+    token = _get_token_from_cache(app_config.SCOPE[0]) #gets token given scope DIRECTORY.ACCESSASUSER.ALL which
+                                                       #returns information based on the permissions a user has
+    if not token: #if token fetching services aren't working: i.e. error handling
+        print(token)
+        flash("The token fetch didn't work.")
+        return redirect(url_for("login"))
     graph_data = requests.get("https://graph.microsoft.com/v1.0/auditLogs/directoryAudits",
-    headers = {'Authorization': 'Bearer ' + token['access_token']}).json()
+    headers = {'Authorization': 'Bearer ' + token['access_token']}).json() #attempts to fetch token for 
     #print(graph_data)
     x = session['user']
-    y = graph_data['value']
-    print(y)
-    
-    return render_template('auditLogs.html', user=x['name'], graph_data=y[0])
+    if 'error' in graph_data:
+        print("lacking permissions")
+        flash("You tried to access a route which you don't have access to.")
+        return redirect(url_for('home'))
+    else:
+        y = graph_data['value']
+        print(y)
+    return render_template('auditLogs.html', title = "Audit Logs", user=x['name'], graph_data=y[0])
 
 @app.route('/logout')
 def logout():
