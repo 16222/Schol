@@ -68,8 +68,8 @@ def authorised():
         return "Login failure: %s, %s" % (
             result["error"], result.get("error_description")) #error handling
     session["user"] = result.get("id_token_claims") #sets key/value pair in session
-    _save_cache(cache)
-    print(cache)
+    _save_cache(cache) #save cache information for next load of website
+    #print(cache) debug
     return redirect("/")
 
 @app.route('/user')
@@ -95,17 +95,18 @@ def auditLogs():
         flash("The token fetch didn't work.")
         return redirect(url_for("login"))
     graph_data = requests.get("https://graph.microsoft.com/v1.0/auditLogs/directoryAudits",
-    headers = {'Authorization': 'Bearer ' + token['access_token']}).json() #attempts to fetch token for 
+    headers = {'Authorization': 'Bearer ' + token['access_token']}).json() #attempts to fetch auditlog data for
+                                                                           #Authentication in token
     #print(graph_data)
-    x = session['user']
-    if 'error' in graph_data:
+    x = session['user'] #used to display username
+    if 'error' in graph_data: #error handling when account doesn't have permissions
         print("lacking permissions")
-        flash("You tried to access a route which you don't have access to.")
-        return redirect(url_for('home'))
+        return redirect(url_for('home'), messages="permissionError")
     else:
         y = graph_data['value']
         print(y)
-    return render_template('auditLogs.html', title = "Audit Logs", user=x['name'], graph_data=y[0])
+        #for i in range(len(y))
+    return render_template('auditLogs.html', title = "Audit Logs", user=x['name'], graph_data=y)
 
 @app.route('/logout')
 def logout():

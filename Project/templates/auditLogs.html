@@ -1,4 +1,43 @@
 {% extends 'layout.html' %}
 {% block content %}
-{{graph_data}}
+<table>
+    <tr>
+        <th>Operation Category</th>
+        <th>Operation Success?</th>
+        <th>Operation Reason</th>
+        <th>Operation Name</th>
+        <th>Operation Time</th>
+        <th>Service Logged</th>
+        <th>Operation Type</th>
+        <th>Initiated By</th>
+    </tr>
+{%for i in graph_data%}
+<tr>
+    <td>
+        {{i['category']}}
+    </td>
+    <td>
+        {{i['result']}}
+    </td>
+    <td>
+        {{i['resultReason']}}
+    </td>
+    <td>
+        {{i['activityDisplayName']}}
+    </td>
+    <td>
+        {{i['activityDateTime']}}
+    </td>
+    <td>
+        {{i['loggedByService']}}
+    </td>
+    <td>
+        {{i['operationType']}}
+    </td>
+    <td>
+        {{i['initiatedBy']}}
+    </td>
+</tr>
+{%endfor%}
+</table>
 {% endblock %}
