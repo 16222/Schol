@@ -1,5 +1,6 @@
 {% extends 'layout.html' %}
 {% block content %}
+<div class="border">
 <table>
     <tr>
         <th>Operation Category</th>
@@ -9,7 +10,6 @@
         <th>Operation Time</th>
         <th>Service Logged</th>
         <th>Operation Type</th>
-        <th>Initiated By</th>
     </tr>
 {%for i in graph_data%}
 <tr>
@@ -34,10 +34,8 @@
     <td>
         {{i['operationType']}}
     </td>
-    <td>
-        {{i['initiatedBy']}}
-    </td>
 </tr>
 {%endfor%}
 </table>
+</div>
 {% endblock %}

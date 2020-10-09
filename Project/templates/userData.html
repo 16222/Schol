@@ -1,28 +1,51 @@
 {% extends 'layout.html' %}
 {% block content %}
+<table>
+    <tr>
+        <th>Business Phone</th>
+        <th>Account Name</th>
+        <th>Given Name</th>
+        <th>Surname</th>
+        <th>Job Title</th>
+        <th>Contact Mail</th>
+        <th>Mobile Phone</th>
+        <th>Office Location</th>
+        <th>Preferred Language</th>
+        <th>Logon Name</th>
+    </tr>
 {% for i in graph_data %}
-<br><br>
-Business Phone - {{ i['businessPhones'] }}
-<br>
-Account Name - {{ i['displayName'] }}
-<br>
-Given Name - {{ i['givenName'] }}
-<br>
-Surname - {{ i['surname'] }}
-<br>
-Job Title - {{ i['jobTitle'] }}
-<br>
-Contact Mail - {{ i['mail'] }}
-<br>
-Mobile Phone - {{ i['mobilePhone'] }}
-<br>
-Office Location - {{ i['officeLocation'] }}
-<br>
-Preferred Language - {{ i['PreferredLanguage'] }}
-<br>
-Logon Name - {{ i['userPrincipalName'] }}
-<br>
-Id - {{ i['id'] }}
-<br>
+    <tr>
+        <td>
+            {{ i['businessPhones'] }}
+        </td>
+        <td>
+            {{ i['displayName'] }}
+        </td>
+        <td>
+            {{ i['givenName'] }}
+        </td>
+        <td>
+            {{ i['surname'] }}
+        </td>
+        <td>
+            {{ i['jobTitle'] }}
+        </td>
+        <td>
+            {{ i['mail'] }}
+        </td>
+        <td>
+            {{ i['mobilePhone'] }}
+        </td>
+        <td>
+            {{ i['officeLocation'] }}
+        </td>
+        <td>
+            {{ i['PreferredLanguage'] }}
+        </td>
+        <td>
+            {{ i['userPrincipalName'] }}
+        </td>
+    </tr>
 {% endfor %}
+</table>
 {% endblock %}

@@ -97,16 +97,20 @@ def auditLogs():
     graph_data = requests.get("https://graph.microsoft.com/v1.0/auditLogs/directoryAudits",
     headers = {'Authorization': 'Bearer ' + token['access_token']}).json() #attempts to fetch auditlog data for
                                                                            #Authentication in token
-    #print(graph_data)
     x = session['user'] #used to display username
     if 'error' in graph_data: #error handling when account doesn't have permissions
         print("lacking permissions")
         return redirect(url_for('home'), messages="permissionError")
     else:
         y = graph_data['value']
-        print(y)
-        #for i in range(len(y))
-    return render_template('auditLogs.html', title = "Audit Logs", user=x['name'], graph_data=y)
+        z = []
+        a = []
+        for i in y:
+            z.append(i['initiatedBy'])
+        for i in z:
+            a.append(i['user'])
+        print(a)
+        return render_template('auditLogs.html', title = "Audit Logs", user=x['name'], graph_data=y)
 
 @app.route('/logout')
 def logout():
