@@ -8,15 +8,14 @@
   background-color:black;
 }
 
-.logo a:visited{ /*link colours are black*/
+.logo a:visited{ /*link colours are white*/
   color:white;
 }
 
-.border{ /*borders for content tabs class*/
+.border{ /*miscellaneous border div */
   border: 5px solid white;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
-  border-top: 0px;
 }
 
 nav { /*surrounding nav element*/
@@ -46,7 +45,7 @@ nav a:hover { /*class used for navbar links whilst they are being hovered over*/
   position: sticky;
 }
 
-content{/*gradient tab which covers all main content within the page*/
+content{/*miscellaneous content tab which covers all main content within the page*/
   color: white;
   display: block;
   padding: 5px;
@@ -87,14 +86,5 @@ body{ /*background colour*/
   background-color:black;
 }
 
-footer{ /*sticky footer*/
-  bottom:0px;
-  color:white;
-  position:fixed;
-  padding:5px;
-  background-color: black;
-  width:100%;
-  padding-right: 5px;
-}
 
 /*Layout css ends*/

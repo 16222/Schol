@@ -7,12 +7,13 @@
   </head>
   
   <body>
-    <content>
     {% include 'header.html'%}
+    {% include 'navigation.html' %}
+    <content>
     {% if user %}
     <h1>Hello, {{user}}!</h1>
     {% endif %}
-    {% include 'navigation.html' %}
+    
     {% block content %}
     {% endblock %}
     <div class='backgroundgradient'></div>
