@@ -3,15 +3,17 @@
 
 .logo{
   text-align: center;
-  border: 5px solid black;
+  border: 5px solid white;
+  color:white;
+  background-color:black;
 }
 
-body{/*white background*/
-  background-color: white;
+.logo a:visited{ /*link colours are black*/
+  color:white;
 }
 
 .border{ /*borders for content tabs class*/
-  border: 5px solid black;
+  border: 5px solid white;
   border-bottom-left-radius: 5px;
   border-bottom-right-radius: 5px;
   border-top: 0px;
@@ -22,7 +24,7 @@ nav { /*surrounding nav element*/
   top: 0;
   /*background-image: linear-gradient(60deg, #b39800, black, black)*/;
   overflow: hidden;
-  Border: 5px solid black;
+  border: 5px solid white;
 }
 
 nav a { /* nav links route*/
@@ -31,23 +33,21 @@ nav a { /* nav links route*/
   float:left;
   display:block;
   padding: 8px;
-  background-color: white;
-  color: black;
+  background-color: black;
+  color: white;
   text-align:center;
-  background: transparent;
 }
 
 nav a:hover { /*class used for navbar links whilst they are being hovered over*/
-  color: white;
+  color: black;
   display:block;
   padding: 8px;
-  background-color: black;
+  background-color: white;
   position: sticky;
 }
 
 content{/*gradient tab which covers all main content within the page*/
-  /*background-image: linear-gradient(90deg, #b39800, black, black);*/
-  color: black;
+  color: white;
   display: block;
   padding: 5px;
   /*opacity: 0.8;*/
@@ -61,15 +61,30 @@ content a:visited{ /*content tabs and visited links*/
   color:white;
 }
 
-.background{ /*background image*/
+.backgroundgradient{ /*background image*/
   opacity:0.5;
   position: absolute;
-  /*background-image:url('/static/images/bonfire.png');*/
-  width:400px;
-  height:400px;
+  background-image: linear-gradient(360deg, #02e3eb, black, black);
+  height:100px;
+  width:100%;
   bottom:0px;
   right:0px;
   background-repeat: no-repeat;
+}
+
+.backgroundimage{
+  opacity:0.5;
+  background-image: url("../images/ap.png");
+  bottom:0px;
+  right:0px;
+  height:530px;
+  width:722px;
+  position: absolute;
+  background-repeat:no-repeat;
+}
+
+body{
+  background-color:black;
 }
 
 footer{ /*sticky footer*/

@@ -1,7 +1,8 @@
 {% extends 'layout.html' %}
 {% block content %}
+<div class="border"> <!--border div-->
 <table>
-    <tr>
+    <tr><!--table headers-->
         <th>Business Phone</th>
         <th>Account Name</th>
         <th>Given Name</th>
@@ -13,7 +14,7 @@
         <th>Preferred Language</th>
         <th>Logon Name</th>
     </tr>
-{% for i in graph_data %}
+{% for i in graph_data %} <!--generating table items-->
     <tr>
         <td>
             {{ i['businessPhones'] }}
@@ -48,4 +49,5 @@
     </tr>
 {% endfor %}
 </table>
+</div>
 {% endblock %}

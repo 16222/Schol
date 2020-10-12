@@ -4,7 +4,9 @@
    <title>AzurePull - {{title}}</title>
    <link rel = 'stylesheet' type = 'text/css' href = '/static/css/style.css'>
   </head>
+  <div class='backgroundimage'></div>
   <body>
+    <content>
     {% include 'header.html'%}
     {% if user %}
     <h1>Hello, {{user}}!</h1>
@@ -12,7 +14,8 @@
     {% include 'navigation.html' %}
     {% block content %}
     {% endblock %}
-    <div class='background'></div>
+    <div class='backgroundgradient'></div>
     <br>
+    </content>
   </body> <!--including templates-->
 </html>

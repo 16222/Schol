@@ -103,6 +103,7 @@ def auditLogs():
         return redirect(url_for('home'), messages="permissionError")
     else:
         y = graph_data['value']
+        '''
         z = []
         a = []
         for i in y:
@@ -110,6 +111,7 @@ def auditLogs():
         for i in z:
             a.append(i['user'])
         print(a)
+        '''
         return render_template('auditLogs.html', title = "Audit Logs", user=x['name'], graph_data=y)
 
 @app.route('/logout')
