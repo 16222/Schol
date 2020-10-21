@@ -34,7 +34,10 @@ db.create_all() #creating all sqlalchemytables
 def home():
     if not session.get('user'):
         return redirect(url_for("login")) #redirect to login page if auth token isn't had
-
+    if "a" in session.get('error'):
+        flash(session['error'])
+        print(session.get('error'))
+        session['error'] = ''
     x = session['user']
     return render_template('home.html', title = "Home", user=x['name'], account=x['preferred_username']) #else redirect to home page
 
@@ -100,7 +103,8 @@ def auditLogs():
     x = session['user'] #used to display username
     if 'error' in graph_data: #error handling when account doesn't have permissions
         print("lacking permissions")
-        return redirect(url_for('home'), messages="permissionError")
+        session["error"] = "You lack permissions to access this information."
+        return redirect(url_for('home'))
     else:
         y = graph_data['value']
         '''
