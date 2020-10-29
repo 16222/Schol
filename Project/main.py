@@ -11,24 +11,9 @@ from msal import ConfidentialClientApplication, PublicClientApplication, Seriali
 
 app = Flask(__name__) #initialising server
 
-app.config['SQLALCHEMY_DATABASE_URI'] = "sqlite:///networkData.db"
-app.config['SQLALCHEMY_TRACK_MODIFICATIONS'] = False
-
 app.config.from_object(app_config) #importing app_config variables
 
 Session(app) #creates an object 'session' that can be used to store dict key/value pairs
-
-db = SQLAlchemy(app) #initialising sqlalchemy
-
-class test(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    example = db.Column(db.String)
-
-class resultStorage(db.Model):
-    id = db.Column(db.Integer, primary_key=True)
-    data = db.Column(db.String)
-
-db.create_all() #creating all sqlalchemytables
 
 @app.route('/')
 def home():
@@ -77,7 +62,7 @@ def authorised():
     return redirect("/")
 
 @app.route('/user')
-def userData():
+def user_data():
     token = _get_token_from_cache(app_config.SCOPE[0])
     if not token:
         return redirect(url_for("login"))
@@ -91,7 +76,7 @@ def userData():
     return render_template('userData.html', title="Query", graph_data=y, user=x['name'])
 
 @app.route('/audit')
-def auditLogs():
+def audit_logs():
     token = _get_token_from_cache(app_config.SCOPE[0]) #gets token given scope DIRECTORY.ACCESSASUSER.ALL which
                                                        #returns information based on the permissions a user has
     if not token: #if token fetching services aren't working: i.e. error handling
