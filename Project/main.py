@@ -34,10 +34,11 @@ db.create_all() #creating all sqlalchemytables
 def home():
     if not session.get('user'):
         return redirect(url_for("login")) #redirect to login page if auth token isn't had
-    if "a" in session.get('error'):
-        flash(session['error'])
-        print(session.get('error'))
-        session['error'] = ''
+    if session.get('error'): #handles the lack of an error session
+        if "a" in session.get('error'):
+            flash(session['error'])
+            print(session.get('error'))
+            session['error'] = ''
     x = session['user']
     return render_template('home.html', title = "Home", user=x['name'], account=x['preferred_username']) #else redirect to home page
 
@@ -107,15 +108,6 @@ def auditLogs():
         return redirect(url_for('home'))
     else:
         y = graph_data['value']
-        '''
-        z = []
-        a = []
-        for i in y:
-            z.append(i['initiatedBy'])
-        for i in z:
-            a.append(i['user'])
-        print(a)
-        '''
         return render_template('auditLogs.html', title = "Audit Logs", user=x['name'], graph_data=y)
 
 @app.route('/logout')
